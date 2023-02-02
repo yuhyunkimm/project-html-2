@@ -1,0 +1,15 @@
+server:
+  port: 8080
+  servlet:
+    encoding:
+      charset: utf-8
+      force: true
+ 
+spring:
+  mvc:
+    view:
+      prefix: /WEB-INF/view/
+      suffix: .jsp 
+  output:
+    ansi:
+      enabled: always
