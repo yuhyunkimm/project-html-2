@@ -24,7 +24,6 @@
       update Board_tb
       set title = #{title},
       userId = #{userId},
-      qty = #{qty}
       where id = #{id}
   </update>
 

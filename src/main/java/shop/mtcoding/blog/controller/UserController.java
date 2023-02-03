@@ -35,14 +35,13 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(String usename, String password) {
-        User user = userRepository.findByUsernameAndPassword(usename, password);
+    public String login(String username, String password) {
+        User user = userRepository.findByUsernameAndPassword(username, password);
         if (user == null) {
-            return "redirect:/board";
+            return "redirect:/loginForm";
         } else {
             session.setAttribute("principal", user);
-            return "redirect:/loginForm";
-
+            return "redirect:/board";
         }
     }
 
