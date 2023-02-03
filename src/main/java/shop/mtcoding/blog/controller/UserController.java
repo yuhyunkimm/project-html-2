@@ -21,4 +21,9 @@ public class UserController {
         return "user/updateForm";
     }
 
+    @GetMapping("/logout")
+    public String logout() {
+        return "redirect:/";
+    }
+
 }
