@@ -4,28 +4,32 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="shop.mtcoding.blog.model.UserRepository">
-  <select id="findAll" resultType="shop.mtcoding.blog.model.User">
-      select * from User_tb
-  </select>
+     <select id="findAll" resultType="shop.mtcoding.blog.model.User">
+        select * from user_tb
+    </select>
 
-  <select id="findById" resultType="shop.mtcoding.blog.model.User">
-      select * from User_tb where id = #{id}
-  </select>
+    <select id="findById" resultType="shop.mtcoding.blog.model.User">
+        select * from user_tb where id = #{id}
+    </select>   
 
-  <select id="findByUsernameAndPassword" resultType="shop.mtcoding.blog.model.User">
-      select * from User_tb where username = #{username} and password = #{password}
-  </select>
+    <select id="findByUsername" resultType="shop.mtcoding.blog.model.User">
+        select * from user_tb where username = #{username}
+    </select>   
 
-  <insert id="insert">
-      insert into User_tb(username, password, email, created_at) values(#{username}, #{password}, #{email}, now())
-  </insert>
+    <select id="findByUsernameAndPassword" resultType="shop.mtcoding.blog.model.User">
+        select * from user_tb where username = #{username} and password = #{password}
+    </select> 
 
-  <update id="updateById">
-      update User_tb
-      set username = #{username},
-      password = #{password},
-      email = #{email}
-      where id = #{id}
-  </update>
+    <insert id="insert">
+        insert into user_tb (username, password, email, created_at) values(#{username}, #{password}, #{email}, now())
+    </insert>    
+
+    <delete id="deleteById" >
+        delete from user_tb where id = #{id} 
+    </delete>    
+
+    <update id="updateById" >
+        update user_tb set username= #{username},password= #{password}, email= #{email} where id = #{id} 
+    </update>    
 
 </mapper>

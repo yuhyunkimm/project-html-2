@@ -68,6 +68,7 @@ public class UserController {
         User principal = userService.로그인(loginReqDto);
         session.setAttribute("principal", principal);
         return "redirect:/";
+
     }
 
     @GetMapping("/loginForm")
@@ -82,6 +83,7 @@ public class UserController {
 
     @GetMapping("/logout")
     public String logout() {
+        session.invalidate();
         return "redirect:/";
     }
 

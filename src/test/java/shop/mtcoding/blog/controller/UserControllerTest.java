@@ -23,12 +23,15 @@ import shop.mtcoding.blog.model.User;
  */
 
 // MOCK = 가짜 환경에 IOC컨테이너가 띄워져 있다 => 실행을 하면 랜덤으로 port설정
+
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = WebEnvironment.MOCK)
 public class UserControllerTest {
 
     @Autowired
     private MockMvc mvc;
+
+    // test 순서 보장이 되지 않는다
 
     @Test
     public void join_test() throws Exception {
@@ -60,5 +63,6 @@ public class UserControllerTest {
         // then
         assertThat(principal.getUsername()).isEqualTo("ssar");
         resultActions.andExpect(status().is3xxRedirection());
+
     }
 }
