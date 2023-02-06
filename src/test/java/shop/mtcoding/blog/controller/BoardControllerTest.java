@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -35,6 +36,7 @@ public class BoardControllerTest {
     // 가짜 인증 만드는 법
     private MockHttpSession mockSession;
 
+    @BeforeEach // Test 메서드 실행 직전 마다 호출됨
     public void setUp() {
         User user = new User();
         user.setId(1);
@@ -50,7 +52,10 @@ public class BoardControllerTest {
     @Test
     public void save_test() throws Exception {
         // given
-        setUp();
+        String title = "";
+        for (int i = 0; i < 99; i++) {
+            title += "가";
+        }
         String requestBody = "title=제목1&content=내용1";
 
         // when

@@ -39,7 +39,10 @@ public class BoardController {
         if (boadSaveReqDto.getContent() == null || boadSaveReqDto.getContent().isEmpty()) {
             throw new CustomException("Content 작성해주세요");
         }
-        boardService.글쓰기(boadSaveReqDto);
+        if (boadSaveReqDto.getTitle().length() > 100) {
+            throw new CustomException("Title의 길이가 100자 이하여야 합니다");
+        }
+        boardService.글쓰기(boadSaveReqDto, principal.getId());
 
         return "redirect:/";
     }
