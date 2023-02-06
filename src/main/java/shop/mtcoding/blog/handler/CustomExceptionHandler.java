@@ -16,7 +16,7 @@ public class CustomExceptionHandler {
     public ResponseEntity<?> customException(CustomException e) {
         // Status = 400 으로 확인
         String responseBody = Script.back(e.getMessage());
-        return new ResponseEntity<>(Script.back(e.getMessage()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(Script.back(e.getMessage()), e.getStatus());
 
     }
 }

@@ -18,15 +18,17 @@ public class UserService {
 
     // 동시 접근 불가능
     @Transactional
-    public int 회원가입(JoinReqDto joinReqDto) {
+    public void 회원가입(JoinReqDto joinReqDto) {
         User sameUser = userRepository.findByUsername(joinReqDto.getUsername());
         if (sameUser != null) {
             throw new CustomException("동일한 username이 존재합니다");
         }
         // insert가 시작 될 때 락이 걸린다(변경코드)
         int result = userRepository.insert(joinReqDto.getUsername(), joinReqDto.getPassword(), joinReqDto.getEmail());
-        return result;
-    };
+        if (result != 1) {
+            throw new CustomException("회원가입실패");
+        }
+    }
 
     // 데이터가 꼬일 수 있는 부분에는 같이 걸어줘야한다
     // 아이솔레이션의 팬텀현상
