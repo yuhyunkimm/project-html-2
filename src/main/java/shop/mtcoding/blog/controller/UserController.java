@@ -36,11 +36,11 @@ public class UserController {
 
         }
         if (joinReqDto.getPassword() == null || joinReqDto.getPassword().isEmpty()) {
-            throw new CustomException("Password 작성해주세요");
+            throw new CustomException("password 작성해주세요");
 
         }
         if (joinReqDto.getEmail() == null || joinReqDto.getEmail().isEmpty()) {
-            throw new CustomException("Email 작성해주세요");
+            throw new CustomException("email 작성해주세요");
 
         }
         int result = userService.회원가입(joinReqDto);
@@ -58,17 +58,14 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(LoginReqDto loginReqDto) {
+        // controlloer 책임 확인
         if (loginReqDto.getUsername() == null || loginReqDto.getUsername().isEmpty()) {
             throw new CustomException("username을 작성해주세요");
         }
         if (loginReqDto.getPassword() == null || loginReqDto.getPassword().isEmpty()) {
-            throw new CustomException("Password 작성해주세요");
+            throw new CustomException("password 작성해주세요");
         }
         User principal = userService.로그인(loginReqDto);
-
-        if (principal == null) {
-            throw new CustomException("유저네임 혹은 패스워드가 잘못 입력 되었습니다.");
-        }
         session.setAttribute("principal", principal);
         return "redirect:/";
     }
