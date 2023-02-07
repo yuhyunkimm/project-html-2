@@ -1,10 +1,14 @@
 package shop.mtcoding.blog.controller;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +21,10 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import shop.mtcoding.blog.dto.board.BoardResp;
+import shop.mtcoding.blog.dto.board.BoardResp.BoardMainRespDto;
 import shop.mtcoding.blog.model.User;
 
 /*
@@ -33,6 +41,9 @@ public class BoardControllerTest {
     @Autowired
     private MockMvc mvc;
 
+    @Autowired
+    private ObjectMapper om;
+
     // 가짜 인증 만드는 법
     private MockHttpSession mockSession;
 
@@ -47,6 +58,23 @@ public class BoardControllerTest {
 
         mockSession = new MockHttpSession();
         mockSession.setAttribute("principal", user);
+    }
+
+    @Test
+    public void main_test() throws Exception {
+        // given
+
+        // when
+        ResultActions resultActions = mvc.perform(
+                get("/"));
+
+        Map<String, Object> map = resultActions.andReturn().getModelAndView().getModel();
+        List<BoardResp.BoardMainRespDto> dtods = (List<BoardResp.BoardMainRespDto>) map.get("dtos");
+        String model = om.writeValueAsString(dtods);
+        System.out.println("테스트 : " + model);
+        // then
+        // "board/main" = status 200번
+        resultActions.andExpect(status().isOk());
     }
 
     @Test
