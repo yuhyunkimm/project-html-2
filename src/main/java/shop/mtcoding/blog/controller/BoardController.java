@@ -41,7 +41,7 @@ public class BoardController {
         }
         // DB에서 봐야 권한 검사를 할 수 있다(DB없다)
         // 삭제는 서비스
-        boardService.게시글삭제(id);
+        boardService.게시글삭제(id, principal.getId());
         // 응답의 dto를 만들어 줘야한다
         // $.ajax.done().fail()=>done 200 fail 나머지
         return new ResponseEntity<>(new ResponsDto<>(1, "삭제성공", null), HttpStatus.OK);
