@@ -25,7 +25,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import shop.mtcoding.blog.dto.board.BoardResp;
+import shop.mtcoding.blog.dto.board.BoardResp.BoardDetailRespDto;
 import shop.mtcoding.blog.dto.board.BoardResp.BoardMainRespDto;
 import shop.mtcoding.blog.model.User;
 
@@ -63,13 +63,30 @@ public class BoardControllerTest {
     }
 
     @Test
+    public void detail_test() throws Exception {
+        // given
+
+        // when
+        ResultActions resultActions = mvc.perform(get("/board/1"));
+        Map<String, Object> map = resultActions.andReturn().getModelAndView().getModel();
+        BoardDetailRespDto dto = (BoardDetailRespDto) map.get("dto");
+        String model = om.writeValueAsString(dto);
+        System.out.println("테스트 : " + model);
+
+        // then
+        resultActions.andExpect(status().isOk());
+        assertThat(dto.getId()).isEqualTo(1);
+
+    }
+
+    @Test
     public void main_test() throws Exception {
         // given
 
         // when
         ResultActions resultActions = mvc.perform(get("/"));
         Map<String, Object> map = resultActions.andReturn().getModelAndView().getModel();
-        List<BoardResp.BoardMainRespDto> dtods = (List<BoardResp.BoardMainRespDto>) map.get("dtos");
+        List<BoardMainRespDto> dtods = (List<BoardMainRespDto>) map.get("dtos");
         String model = om.writeValueAsString(dtods);
         System.out.println("테스트 : " + model);
 
@@ -77,7 +94,7 @@ public class BoardControllerTest {
         // "board/main" = status 200번
         resultActions.andExpect(status().isOk());
         assertThat(dtods.size()).isEqualTo(6);
-
+        assertThat(dtods.get(6).getUsername()).isEqualTo("ssar");
     }
 
     @Test
