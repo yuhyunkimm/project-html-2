@@ -1,5 +1,6 @@
 package shop.mtcoding.blog.controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,16 +67,17 @@ public class BoardControllerTest {
         // given
 
         // when
-        ResultActions resultActions = mvc.perform(
-                get("/"));
-
+        ResultActions resultActions = mvc.perform(get("/"));
         Map<String, Object> map = resultActions.andReturn().getModelAndView().getModel();
         List<BoardResp.BoardMainRespDto> dtods = (List<BoardResp.BoardMainRespDto>) map.get("dtos");
         String model = om.writeValueAsString(dtods);
         System.out.println("테스트 : " + model);
+
         // then
         // "board/main" = status 200번
         resultActions.andExpect(status().isOk());
+        assertThat(dtods.size()).isEqualTo(6);
+
     }
 
     @Test
