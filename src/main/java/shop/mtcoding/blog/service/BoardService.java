@@ -46,4 +46,23 @@ public class BoardService {
             // e.massage() , 시간 , request => 클래스를 따로 만들어서 관리해야 한다
         }
     }
+
+    // 권한검사
+    // update 검사
+    public void 게시물수정(int id, int usrId) {
+        // Board boardPS = boardRepository.findById(id);
+        // if (boardPS == null) {
+        // throw new CustomApiException("해당 게시글을 수정 할 수 없습니다");
+        // }
+        // if (boardPS.getUserId() != userId) {
+        // throw new CustomApiException("해당 게시글을 수정할 권한이 없습니다", HttpStatus.FORBIDDEN);
+        // }
+        // try {
+        // boardRepository.deleteById(id);
+        // } catch (Exception e) {
+        // throw new CustomApiException("서버에 일시적인 문제가 생겼습니다.",
+        // HttpStatus.INTERNAL_SERVER_ERROR);
+
+        // }
+    }
 }

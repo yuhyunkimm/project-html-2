@@ -16,4 +16,13 @@ public class BoardReq {
             return null;
         }
     }
+
+    @Getter
+    @Setter
+    public class BoardUpdateReqDto {
+        private int id;
+        private String title;
+        private String content;
+
+    }
 }

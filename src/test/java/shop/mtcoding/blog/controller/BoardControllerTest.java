@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.sql.Timestamp;
@@ -71,7 +72,17 @@ public class BoardControllerTest {
                 delete("/board/" + id).session(mockSession));
         String reponseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("테스트 : " + reponseBody);
+
+        /*
+         * jasonPath
+         * 최상위 : $
+         * 객체탐색 : (.)닷
+         * 배열 : [0]
+         * 시작 = $ , 오브젝트{} = . ,
+         * ex> $[0].title
+         */
         // then
+        resultActions.andExpect(jsonPath("$.code").value(1));
         resultActions.andExpect(status().isOk());
     }
 
