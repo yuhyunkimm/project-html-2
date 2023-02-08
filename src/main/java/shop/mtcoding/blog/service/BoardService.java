@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import shop.mtcoding.blog.dto.board.BoardReq.BoardSaveReqDto;
+import shop.mtcoding.blog.dto.board.BoardReq.BoardUpdateReqDto;
 import shop.mtcoding.blog.handler.ex.CustomApiException;
 import shop.mtcoding.blog.handler.ex.CustomException;
 import shop.mtcoding.blog.model.Board;
@@ -47,22 +48,20 @@ public class BoardService {
         }
     }
 
-    // 권한검사
-    // update 검사
-    public void 게시물수정(int id, int usrId) {
-        // Board boardPS = boardRepository.findById(id);
-        // if (boardPS == null) {
-        // throw new CustomApiException("해당 게시글을 수정 할 수 없습니다");
-        // }
-        // if (boardPS.getUserId() != userId) {
-        // throw new CustomApiException("해당 게시글을 수정할 권한이 없습니다", HttpStatus.FORBIDDEN);
-        // }
-        // try {
-        // boardRepository.deleteById(id);
-        // } catch (Exception e) {
-        // throw new CustomApiException("서버에 일시적인 문제가 생겼습니다.",
-        // HttpStatus.INTERNAL_SERVER_ERROR);
-
-        // }
+    @Transactional
+    public void 게시글수정(int id, BoardUpdateReqDto boardUpdateReqDto, int principalId) {
+        // 부가적인 로직 = AOP(관점지향로직)
+        Board boardPS = boardRepository.findById(id);
+        if (boardPS == null) {
+            throw new CustomApiException("해당 게시글을 찾을 수 없습니다");
+        }
+        if (boardPS.getUserId() == principalId) {
+            throw new CustomApiException("해당 게시글을 수정할 권한이 없습니다", HttpStatus.FORBIDDEN);
+        }
+        // 핵심로직
+        int result = boardRepository.updateById(id, boardUpdateReqDto.getTitle(), boardUpdateReqDto.getContent());
+        if (result != 1) {
+            throw new CustomApiException("서버에 일시적인 문제가 생겼습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

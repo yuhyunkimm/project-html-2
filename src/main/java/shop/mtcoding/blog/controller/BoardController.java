@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import shop.mtcoding.blog.dto.ResponsDto;
@@ -19,10 +20,12 @@ import shop.mtcoding.blog.dto.board.BoardReq.BoardSaveReqDto;
 import shop.mtcoding.blog.dto.board.BoardReq.BoardUpdateReqDto;
 import shop.mtcoding.blog.handler.ex.CustomApiException;
 import shop.mtcoding.blog.handler.ex.CustomException;
+import shop.mtcoding.blog.model.Board;
 import shop.mtcoding.blog.model.BoardRepository;
 import shop.mtcoding.blog.model.User;
 import shop.mtcoding.blog.service.BoardService;
 
+// 죄회는 컨트롤러에서 만들기
 @Controller
 public class BoardController {
     @Autowired
@@ -33,6 +36,28 @@ public class BoardController {
 
     @Autowired
     private BoardRepository boardRepository;
+
+    @PutMapping("/board/{id}")
+    // @RequestBody는 전략을 바꿔준다
+    // @RequestBody = buffer로 읽는다 BoardUpdateReqDto(content)타입으로 읽어준다
+    // text로 한다면 json으로 받는다
+    // .getParameter는 =값 파싱해준다
+    public @ResponseBody ResponseEntity<?> update(@PathVariable int id,
+            @RequestBody BoardUpdateReqDto boardUpdateReqDto) {
+        User principal = (User) session.getAttribute("principal");
+        if (principal == null) {
+            throw new CustomApiException("인증이 되지 않았습니다", HttpStatus.UNAUTHORIZED);
+        }
+        if (boardUpdateReqDto.getTitle() == null || boardUpdateReqDto.getTitle().isEmpty()) {
+            throw new CustomApiException("Title 작성해주세요");
+        }
+        if (boardUpdateReqDto.getContent() == null || boardUpdateReqDto.getContent().isEmpty()) {
+            throw new CustomApiException("Content 작성해주세요");
+        }
+        boardService.게시글수정(id, boardUpdateReqDto, principal.getId());
+        return new ResponseEntity<>(new ResponsDto<>(1, "게시글수정성공", null), HttpStatus.OK);
+
+    }
 
     @DeleteMapping("/board/{id}")
     public @ResponseBody ResponseEntity<?> delete(@PathVariable int id) {
@@ -94,37 +119,44 @@ public class BoardController {
         return "board/saveForm";
     }
 
-    @PutMapping("/board/{id}/boardUpdateForm")
-    public @ResponseBody ResponseEntity<?> update(@PathVariable int id, String title, String content) { // 1. dto 만들어서 =
-                                                                                                        // title,
-                                                                                                        // content
-        // 2. 인증검사
+    // @PutMapping("/board/{id}/boardUpdateForm")
+    // public @ResponseBody ResponseEntity<?> update(@PathVariable int
+    // id,BoardUpdateReqDto boardUpdateReqDto) {
+    // User principal = (User) session.getAttribute("principal");
+    // if (principal == null) {
+    // throw new CustomApiException("인증이 되지 않았습니다", HttpStatus.UNAUTHORIZED);
+    // }
+    // // 3. 유효성검사
+    // if (boardUpdateReqDto.getTitle() == null ||
+    // boardUpdateReqDto.getTitle().isEmpty()) {
+    // throw new CustomException("Title 작성해주세요");
+    // }
+    // if (boardUpdateReqDto.getContent() == null ||
+    // boardUpdateReqDto.getContent().isEmpty()) {
+    // throw new CustomException("Content 작성해주세요");
+    // }
+    // boardService.게시물수정(boardUpdateReqDto, principal.getId()); // title / content
+    // / userId
+    // return new ResponseEntity<>(new ResponsDto<>(1, "수정성공", null),
+    // HttpStatus.OK);
+    // }
+
+    @GetMapping("/board/{id}/boardUpdateForm")
+    public String boardUpdateForm(@PathVariable int id, Model model) {
         User principal = (User) session.getAttribute("principal");
         if (principal == null) {
             throw new CustomApiException("인증이 되지 않았습니다", HttpStatus.UNAUTHORIZED);
         }
-        // 3. 유효성검사
-
-        boardService.게시물수정(id); // title / content / userId
-        return new ResponseEntity<>(new ResponsDto<>(1, "수정성공", null), HttpStatus.OK);
-    }
-
-    @PostMapping("/board/{id}/boardUpdateForm")
-    public String update(BoardUpdateReqDto boardUpdateReqDto) {
-        User principal = (User) session.getAttribute("principal");
-        if (boardUpdateReqDto.getTitle() == null || boardUpdateReqDto.getTitle().isEmpty()) {
-            throw new CustomException("Title 작성해주세요");
+        // 서비스 권한 사용 / 이번 프로젝트에선 컨트롤러에 만들기
+        Board boardPS = boardRepository.findById(id);
+        if (boardPS == null) {
+            throw new CustomException("없는 게시글을 수정할 수 없습니다.");
         }
-        if (boardUpdateReqDto.getContent() == null || boardUpdateReqDto.getContent().isEmpty()) {
-            throw new CustomException("Content 작성해주세요");
+        if (boardPS.getUserId() == principal.getId()) {
+            throw new CustomException("게시글을 수정할 권한이 없습니다.", HttpStatus.FORBIDDEN);
         }
-        boardService.게시물수정(boardUpdateReqDto, principal.getId());
-
-    }
-
-    @GetMapping("/board/{id}/boardUpdateForm")
-    public String boardUpdateForm(@PathVariable int id) {
+        // request 저장
+        model.addAttribute("board", boardPS);
         return "board/boardUpdateForm";
     }
-
 }

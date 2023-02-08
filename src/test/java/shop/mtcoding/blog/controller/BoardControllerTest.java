@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -22,9 +21,11 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import shop.mtcoding.blog.dto.board.BoardReq.BoardUpdateReqDto;
 import shop.mtcoding.blog.dto.board.BoardResp.BoardDetailRespDto;
 import shop.mtcoding.blog.dto.board.BoardResp.BoardMainRespDto;
 import shop.mtcoding.blog.model.User;
@@ -36,6 +37,10 @@ import shop.mtcoding.blog.model.User;
 
 // MOCK = 가짜 환경에 IOC컨테이너가 띄워져 있다 => 실행을 하면 랜덤으로 port설정
 
+// 각각의 테스트는 격리성을 가져야한다
+// 메서드 실행 직후 롤백 , 테스트 격리를 위해 필요하다 
+// 단점 : auto_increment 초기화
+@Transactional
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = WebEnvironment.MOCK)
 public class BoardControllerTest {
@@ -49,8 +54,14 @@ public class BoardControllerTest {
     // 가짜 인증 만드는 법
     private MockHttpSession mockSession;
 
-    @BeforeEach // Test 메서드 실행 직전 마다 호출됨
+    // @BeforeEach // Test 메서드 실행 직전 마다 호출됨
+    // @AfterAll
+    // @Truncate
+
     public void setUp() {
+        // 데이터 인서트
+
+        // 세션 주입
         User user = new User();
         user.setId(1);
         user.setUsername("ssar");
@@ -60,6 +71,28 @@ public class BoardControllerTest {
 
         mockSession = new MockHttpSession();
         mockSession.setAttribute("principal", user);
+    }
+
+    @Test
+    public void update_test() throws Exception {
+        // given
+        int id = 1;
+        BoardUpdateReqDto boardUpdateReqDto = new BoardUpdateReqDto();
+        boardUpdateReqDto.setTitle("제목1-수정");
+        boardUpdateReqDto.setContent("내용1-수정");
+
+        String requestBody = om.writeValueAsString(boardUpdateReqDto);
+        System.out.println("테스트 : " + requestBody);
+        // when
+        ResultActions resultActions = mvc.perform(
+                post("/board/" + id)
+                        .content(requestBody)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE) // default : utf-8
+                        .session(mockSession));
+
+        // then
+        resultActions.andExpect(status().isOk());
+        resultActions.andExpect(jsonPath("$.code").value(1));
     }
 
     @Test

@@ -7,20 +7,14 @@ public class BoardReq {
 
     @Getter
     @Setter
-    public class BoardSaveReqDto {
-        private int id;
+    public static class BoardSaveReqDto {
         private String title;
-        private String username;
-
-        public String getContent() {
-            return null;
-        }
+        private String content;
     }
 
     @Getter
     @Setter
-    public class BoardUpdateReqDto {
-        private int id;
+    public static class BoardUpdateReqDto {
         private String title;
         private String content;
 
