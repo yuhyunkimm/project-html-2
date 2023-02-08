@@ -10,6 +10,8 @@ import lombok.Setter;
 public class Board {
     private int id;
     private String title;
+    private String content;
+    private String thumbnail;
     private int userId;
     private Timestamp createdAt;
 }
