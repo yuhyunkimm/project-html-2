@@ -22,7 +22,10 @@ public class BoardService {
     @Transactional
     // where절 들어가는 파라미터를 첫번째에 설정 나머지는 뒤에 받는다
     public int 글쓰기(BoardSaveReqDto boadSaveReqDto, int useId) {
-        int result = boardRepository.insert(boadSaveReqDto.getTitle(), boadSaveReqDto.getContent(), useId);
+
+        // 1. content 내용을 Document로 받고, img 찾아내서 (0,1,2) 0번에 src를 찾아서 thumnail 추가
+        // controller에서 코드를 짜고 util 폴더에 옮겨준다
+        int result = boardRepository.insert(boadSaveReqDto.getTitle(), boadSaveReqDto.getContent(), null, useId);
         if (result != 1) {
             throw new CustomException("글쓰기 실패", HttpStatus.INTERNAL_SERVER_ERROR);
         }

@@ -11,10 +11,8 @@ public class HtmlParseTest {
 
     @Test
     public void jsoup_test1() throws Exception {
-        System.out.println("===============================================");
         Document doc = Jsoup.connect("https://en.wikipedia.org/").get();
         System.out.println(doc.title());
-        System.out.println("===============================================");
         Elements newsHeadlines = doc.select("#mp-itn b a");
         for (Element headline : newsHeadlines) {
             System.out.println(headline.attr("title"));
