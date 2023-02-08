@@ -119,28 +119,6 @@ public class BoardController {
         return "board/saveForm";
     }
 
-    // @PutMapping("/board/{id}/boardUpdateForm")
-    // public @ResponseBody ResponseEntity<?> update(@PathVariable int
-    // id,BoardUpdateReqDto boardUpdateReqDto) {
-    // User principal = (User) session.getAttribute("principal");
-    // if (principal == null) {
-    // throw new CustomApiException("인증이 되지 않았습니다", HttpStatus.UNAUTHORIZED);
-    // }
-    // // 3. 유효성검사
-    // if (boardUpdateReqDto.getTitle() == null ||
-    // boardUpdateReqDto.getTitle().isEmpty()) {
-    // throw new CustomException("Title 작성해주세요");
-    // }
-    // if (boardUpdateReqDto.getContent() == null ||
-    // boardUpdateReqDto.getContent().isEmpty()) {
-    // throw new CustomException("Content 작성해주세요");
-    // }
-    // boardService.게시물수정(boardUpdateReqDto, principal.getId()); // title / content
-    // / userId
-    // return new ResponseEntity<>(new ResponsDto<>(1, "수정성공", null),
-    // HttpStatus.OK);
-    // }
-
     @GetMapping("/board/{id}/boardUpdateForm")
     public String boardUpdateForm(@PathVariable int id, Model model) {
         User principal = (User) session.getAttribute("principal");
@@ -152,7 +130,7 @@ public class BoardController {
         if (boardPS == null) {
             throw new CustomException("없는 게시글을 수정할 수 없습니다.");
         }
-        if (boardPS.getUserId() == principal.getId()) {
+        if (boardPS.getUserId() != principal.getId()) {
             throw new CustomException("게시글을 수정할 권한이 없습니다.", HttpStatus.FORBIDDEN);
         }
         // request 저장

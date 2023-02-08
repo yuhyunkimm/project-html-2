@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import shop.mtcoding.blog.dto.board.BoardReq.BoardSaveReqDto;
 import shop.mtcoding.blog.dto.board.BoardReq.BoardUpdateReqDto;
+import shop.mtcoding.blog.dto.board.BoardResp.BoardMainRespDto;
 import shop.mtcoding.blog.handler.ex.CustomApiException;
 import shop.mtcoding.blog.handler.ex.CustomException;
 import shop.mtcoding.blog.model.Board;
@@ -22,8 +23,7 @@ public class BoardService {
     @Transactional
     // where절 들어가는 파라미터를 첫번째에 설정 나머지는 뒤에 받는다
     public int 글쓰기(BoardSaveReqDto boadSaveReqDto, int useId) {
-
-        // 1. content 내용을 Document로 받고, img 찾아내서 (0,1,2) 0번에 src를 찾아서 thumnail 추가
+        // 1. content 내용을 Document로 받고, img 찾아내서 (0,1,2) 0번에 src를 찾아서 thumbnail 추가
         // controller에서 코드를 짜고 util 폴더에 옮겨준다
         int result = boardRepository.insert(boadSaveReqDto.getTitle(), boadSaveReqDto.getContent(), null, useId);
         if (result != 1) {
