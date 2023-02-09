@@ -77,23 +77,23 @@ public class BoardController {
 
     // Status = 401
     @PostMapping("/board")
-    public String save(BoardSaveReqDto boadSaveReqDto) {
+    public @ResponseBody ResponseEntity<?> save(@RequestBody BoardSaveReqDto boadSaveReqDto) {
         User principal = (User) session.getAttribute("principal");
         if (principal == null) {
-            throw new CustomException("인증이 되지 않았습니다", HttpStatus.UNAUTHORIZED);
+            throw new CustomApiException("인증이 되지 않았습니다", HttpStatus.UNAUTHORIZED);
         }
         if (boadSaveReqDto.getTitle() == null || boadSaveReqDto.getTitle().isEmpty()) {
-            throw new CustomException("Title 작성해주세요");
+            throw new CustomApiException("Title 작성해주세요");
         }
         if (boadSaveReqDto.getContent() == null || boadSaveReqDto.getContent().isEmpty()) {
-            throw new CustomException("Content 작성해주세요");
+            throw new CustomApiException("Content 작성해주세요");
         }
         if (boadSaveReqDto.getTitle().length() > 100) {
-            throw new CustomException("Title의 길이가 100자 이하여야 합니다");
+            throw new CustomApiException("Title의 길이가 100자 이하여야 합니다");
         }
         boardService.글쓰기(boadSaveReqDto, principal.getId());
 
-        return "redirect:/";
+        return new ResponseEntity<>(new ResponsDto<>(1, "글쓰기성공", null), HttpStatus.CREATED); // HttpStatus.CREATED : 201
     }
 
     @GetMapping({ "/", "/board" })
