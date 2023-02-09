@@ -26,14 +26,16 @@
                     url: "/board/" + id,
                     data: JSON.stringify(data),
                     contentType: "application/json; charset=utf-8",
-                    dataType: "json" //default : 응답의 mime 타입으로 유추함
-                }).done((res) => {
+                    dataType: "json" // default : 응답의 mime 타입으로 유추함
+                }).done((res) => { // 20X 일때
                     alert(res.msg);
                     location.href = "/board/" + id;
-                }).fail((err) => {
+                }).fail((err) => { // 40X, 50X 일때
+                    console.log(err);
                     alert(err.responseJSON.msg);
                 });
             }
+            
         </script>
 
         <script>

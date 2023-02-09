@@ -63,7 +63,7 @@ public class BoardService {
         if (boardPS == null) {
             throw new CustomApiException("해당 게시글을 찾을 수 없습니다");
         }
-        if (boardPS.getUserId() == principalId) {
+        if (boardPS.getUserId() != principalId) {
             throw new CustomApiException("해당 게시글을 수정할 권한이 없습니다", HttpStatus.FORBIDDEN);
         }
         // 핵심로직

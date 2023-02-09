@@ -17,7 +17,7 @@
 
         </div>
         <script>
-            function Save() {
+            function save() {
                 let data = {
                     "title": $("#title").val(),
                     "content": $("#content").val()
