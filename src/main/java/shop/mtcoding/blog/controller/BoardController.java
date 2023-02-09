@@ -24,6 +24,7 @@ import shop.mtcoding.blog.model.Board;
 import shop.mtcoding.blog.model.BoardRepository;
 import shop.mtcoding.blog.model.User;
 import shop.mtcoding.blog.service.BoardService;
+import shop.mtcoding.blog.util.HtmlParser;
 
 // 죄회는 컨트롤러에서 만들기
 @Controller
@@ -54,6 +55,7 @@ public class BoardController {
         if (boardUpdateReqDto.getContent() == null || boardUpdateReqDto.getContent().isEmpty()) {
             throw new CustomApiException("Content 작성해주세요");
         }
+
         boardService.게시글수정(id, boardUpdateReqDto, principal.getId());
         return new ResponseEntity<>(new ResponsDto<>(1, "게시글수정성공", null), HttpStatus.OK);
 

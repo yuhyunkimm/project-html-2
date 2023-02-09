@@ -67,7 +67,9 @@ public class BoardService {
             throw new CustomApiException("해당 게시글을 수정할 권한이 없습니다", HttpStatus.FORBIDDEN);
         }
         // 핵심로직
-        int result = boardRepository.updateById(id, boardUpdateReqDto.getTitle(), boardUpdateReqDto.getContent());
+        String thumbnail = HtmlParser.getThumbnail(boardUpdateReqDto.getContent());
+        int result = boardRepository.updateById(id, boardUpdateReqDto.getTitle(), thumbnail,
+                boardUpdateReqDto.getContent());
         if (result != 1) {
             throw new CustomApiException("서버에 일시적인 문제가 생겼습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
