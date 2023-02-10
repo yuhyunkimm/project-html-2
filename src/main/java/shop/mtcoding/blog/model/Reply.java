@@ -13,5 +13,5 @@ public class Reply {
     private int userId;
     private int boardId;
     private Timestamp createdAt;
-    // 수정일 남겨야한다
+
 }

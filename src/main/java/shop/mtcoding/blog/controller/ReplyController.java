@@ -7,9 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import lombok.Getter;
-import lombok.Setter;
-import shop.mtcoding.blog.handler.ex.CustomApiException;
+import shop.mtcoding.blog.dto.reply.ReplyReq.ReplySaveReqDto;
 import shop.mtcoding.blog.handler.ex.CustomException;
 import shop.mtcoding.blog.model.User;
 import shop.mtcoding.blog.service.ReplyService;
@@ -26,6 +24,8 @@ public class ReplyController {
     @PostMapping("/reply") // where에 들어가지 않으면 주소에 걸지 않는다 => 컨벤션따라 유동적으로 사용
     public String save(ReplySaveReqDto replySaveReqDto) {
         // 댓글1
+        System.out.println("테스트 : " + replySaveReqDto.getComment());
+        System.out.println("테스트 : " + replySaveReqDto.getBoardId());
         User principal = (User) session.getAttribute("principal");
         if (principal == null) {
             throw new CustomException("인증이 되지 않았습니다", HttpStatus.UNAUTHORIZED);
@@ -41,10 +41,4 @@ public class ReplyController {
         return "redirect:/board/" + replySaveReqDto.getBoardId();
     }
 
-    @Getter
-    @Setter
-    public static class ReplySaveReqDto {
-        private String comment;
-        private Integer boardId; // int 대신 사용하면 비어있으면 null 사용 가능
-    }
 }
