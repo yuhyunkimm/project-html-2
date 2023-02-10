@@ -18,6 +18,7 @@ public class HtmlParseTest {
             System.out.println(headline.attr("title"));
             System.out.println(headline.absUrl("href"));
         }
+        // Elements elements = doc.select(); select안에 브라우저 검사를해서 찾은 html을 넣어 문자를 찾아준다
     }
 
     @Test
