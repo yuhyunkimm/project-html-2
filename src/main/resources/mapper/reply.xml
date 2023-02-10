@@ -15,7 +15,7 @@
     </select>    
 
     <insert id="insert">
-        insert into Reply_tb (comment, usr_id, board_id, created_at) values(#{comment}, #{usrId}, #{boardId}, now())
+        insert into Reply_tb (comment, board_id, usr_id, created_at) values(#{comment}, #{boardId}, #{usrId}, now())
     </insert>    
 
     <delete id="deleteById" >

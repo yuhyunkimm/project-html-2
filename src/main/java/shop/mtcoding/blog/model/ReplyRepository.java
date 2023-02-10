@@ -12,8 +12,7 @@ public interface ReplyRepository {
 
         public Reply findById(int id);
 
-        public int insert(@Param("comment") String comment, @Param("usrId") int usrId,
-                        @Param("boardId") int boardId);
+        public int insert(@Param("comment") String comment, @Param("boardId") int boardId, @Param("usrId") int usrId);
 
         public int updateById(@Param("id") int id, @Param("comment") String comment);
 

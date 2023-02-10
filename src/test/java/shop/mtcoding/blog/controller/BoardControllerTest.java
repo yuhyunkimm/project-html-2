@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -58,7 +60,7 @@ public class BoardControllerTest {
     // @BeforeEach // Test 메서드 실행 직전 마다 호출됨
     // @AfterAll
     // @Truncate
-
+    @BeforeEach
     public void setUp() {
         // 데이터 인서트
 
@@ -83,14 +85,16 @@ public class BoardControllerTest {
         boardUpdateReqDto.setContent("내용1-수정");
 
         String requestBody = om.writeValueAsString(boardUpdateReqDto);
-        System.out.println("테스트 : " + requestBody);
+        // System.out.println("테스트 : " + requestBody);
         // when
         ResultActions resultActions = mvc.perform(
-                post("/board/" + id)
+                put("/board/" + id)
                         .content(requestBody)
                         .contentType(MediaType.APPLICATION_JSON_VALUE) // default : utf-8
                         .session(mockSession));
 
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.print("테스트: " + responseBody);
         // then
         resultActions.andExpect(status().isOk());
         resultActions.andExpect(jsonPath("$.code").value(1));
