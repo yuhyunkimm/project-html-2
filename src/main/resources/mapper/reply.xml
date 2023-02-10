@@ -5,24 +5,24 @@
 
 <mapper namespace="shop.mtcoding.blog.model.ReplyRepository">
 
-
     <select id="findAll" resultType="shop.mtcoding.blog.model.Reply">
-        select * from Reply_tb
+        select * from reply_tb
     </select>
 
     <select id="findById" resultType="shop.mtcoding.blog.model.Reply">
-        select * from Reply_tb where id = #{id}
+        select * from reply_tb where id = #{id}
     </select>    
 
     <insert id="insert">
-        insert into Reply_tb (comment, board_id, usr_id, created_at) values(#{comment}, #{boardId}, #{usrId}, now())
+        insert into reply_tb (comment, board_id, user_id, created_at) values(#{comment}, #{boardId}, #{userId}, now())
     </insert>    
 
     <delete id="deleteById" >
-        delete from Reply_tb where id = #{id} 
+        delete from reply_tb where id = #{id}
     </delete>    
 
     <update id="updateById" >
-        update Reply_tb set comment= #{comment} where id = #{id} 
+        update reply_tb set comment= #{comment} where id = #{id}
     </update>    
+  
 </mapper>
