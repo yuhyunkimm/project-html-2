@@ -48,12 +48,14 @@
             <div class="card">
                 <div class="card-header">댓글 리스트</div>
                     <ul id="reply-box" class="list-group">
-                    <c:forEach items="${replyDots}" var="reply">
+                    <c:forEach items="${replyDtos}" var="reply">
                         <li id="reply-${reply.id}" class="list-group-item d-flex justify-content-between">
                             <div>${reply.comment}</div>
                             <div class="d-flex">
                                 <div class="font-italic">작성자 : ${reply.username}</div>
-                                <button onClick="deleteByReplyId(${reply.id})" class="badge bg-secondary">삭제</button>
+                                <c:if test="${principal.id == reply.userId}" >
+                                    <button onClick="deleteByReplyId(${reply.id})" class="badge bg-secondary">삭제</button>
+                                </c:if>
                             </div>
                         </li>
                     </c:forEach>
@@ -63,7 +65,21 @@
 
 <script>
     function deleteByReplyId(id) {
-        
+        $.ajax({
+            type: "delete",
+            url: "/reply/" + id,
+            dataType: "json"
+        }).done((res) => { 
+            alert(res.msg);
+            //location.reload(); F5
+        }).fail((err) => { 
+            alert(err.responseJSON.msg);
+        });
+        //$("#reply-"+id).remove();
+        //location.reload();
+        /*
+         * 하나를 삭제하고 그것을 뺀 나머지를 다시 다운받아서 사용하기 때문에 과부화가 걸린다
+         */
     }
 
     function deleteById(id) {
