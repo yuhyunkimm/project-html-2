@@ -42,50 +42,54 @@
                 </c:otherwise>
             </c:choose>
 
-            <script>
-                function loveOrCancle() {
-                    let boardId = $("boardId").val();
-                    // undefined 상태이다
-                    let id = $("#heart").attr("value");
+              <script>
 
-                    // 본인의 속성이 아닌 엘레멘트의 값을 JQuery는 못가져온다
-                    if (id == undefined || id == "") {
-                        // 좋아요 통신 요청 (POST)
-                        let data = {
-                            boardId: boardId
-                        }
-                        $.ajax({
-                            type: "post",
-                            url: "/love",
-                            data: JSON.stringify(data),
-                            contentType: "application/json; charset=utf-8",
-                            dataType: "json"
-                        }).done((res) => { // 20X 일때
-                            alert(res.msg);
-                            $("#heart").attr("value", res.data);
-                            $("#heart").addClass("fa-solid");
-                            $("#heart").removeClass("fa-regular");
-                        }).fail((err) => { // 40X, 50X 일때
-                            alert(err.responseJSON.msg);
-                        });
 
-                    } else {
-                        // 좋아요 취소 통신 요청(delete)
-                        $.ajax({
-                            type: "delete",
-                            url: "/love/" + id,
-                            dataType: "json"
-                        }).done((res) => {
-                            alert(res.msg);
-                            $("#heart").attr("value", undefined);
-                            $("#heart").removeClass("fa-solid");
-                            $("#heart").addClass("fa-regular");
-                        }).fail((err) => {
-                            alert(err.responseJSON.msg);
-                        });
-                    }
+        function loveOrCancle(){
+            let boardId = $("#boardId").val();
+            let id = $("#heart").attr("value");
+            console.log(id);
+
+            if (id == "") {
+                // 좋아요 통신 요청 (POST)
+                let data = {
+                    boardId: boardId
                 }
-            </script>
+
+                $.ajax({
+                    type: "post",
+                    url: "/love",
+                    data: JSON.stringify(data),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json"
+                }).done((res) => { // 20X 일때
+                    alert(res.msg);
+                    $("#heart").attr("value", res.data);
+                    $("#heart").addClass("fa-solid");
+                    $("#heart").removeClass("fa-regular");
+                }).fail((err) => { // 40X, 50X 일때
+                    alert(err.responseJSON.msg);
+                });
+            } else {
+                // 좋아요 취소 통신 요청 (DELETE)
+                $.ajax({
+                    type: "delete",
+                    url: "/love/"+id,
+                    dataType: "json"
+                }).done((res) => { // 20X 일때
+                    alert(res.msg);
+                    $("#heart").attr("value", "");
+                    $("#heart").removeClass("fa-solid");
+                    $("#heart").addClass("fa-regular");
+                }).fail((err) => { // 40X, 50X 일때
+                    console.log(err);
+                });
+            }
+        }
+
+
+    </script>
+
 
             <div class="card mt-3">
                 <form action="/reply" method="post">
@@ -150,5 +154,4 @@
                 });
             }
         </script>
-
-        <%@ include file="../layout/footer.jsp" %>
+<%@ include file="../layout/footer.jsp" %>
