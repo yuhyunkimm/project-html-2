@@ -81,23 +81,18 @@
             }
 
             function chooseImage(obj) {
-                //console.log(obj);
-                //console.log(obj.files);
-                // 메타정보만 읽기 때문에 빠르게 읽은다
+                // 메타정보만 읽기 때문에 빠르게 읽는다
                 let f = obj.files[0];
-                //console.log(f);
 
                 if (!f.type.match("image.*")) { // =mime 타입이 아니라면 
                     alert("이미지를 등록해야 합니다.") // 이미지 파일만 들어오게 설정
                     return;
                 }
 
-
-                // 메모리 개념 =>
-                // 이때 받는 것은 IO로 받는다
-                // IO는 데이터가 느리다 
-                //상처를 내서 데이터 기록하는 것을 하드디스크 전류로 데이터저장은 램 컴퓨터가 꺼지면 하드디스크(물리적)만 저장
                 // 하드디스크 접근 = IO , 램 접근 = Cash
+                // IO는 데이터가 느리다 
+                // 이때 받는 것은 IO로 받는다
+                //상처를 내서 데이터 기록하는 것을 하드디스크 전류로 데이터저장은 램 컴퓨터가 꺼지면 하드디스크(물리적)만 저장
                 // cash는 상대적인 개념이다 (ex 가까운곳 = cashing memory)
                 // 자주 쓰는 데이터는 빨리 엑세스 가능하고 cpu가 빠르다고 해도 가깝지 않으면 시간이 걸린다 
                 let reader = new FileReader();

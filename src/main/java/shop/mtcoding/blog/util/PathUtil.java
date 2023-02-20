@@ -20,7 +20,7 @@ public class PathUtil {
         String uuidImageRealName = "images\\" + uuid + "_" + profile.getOriginalFilename();
 
         String staticFolder = getStaticFolder();
-        Path imageFilePath = Paths.get(staticFolder + "\\" + uuidImageRealName);
+        Path imageFilePath = Paths.get(staticFolder + uuidImageRealName);
         try {
             Files.write(imageFilePath, profile.getBytes()); // 버퍼드라이트
         } catch (Exception e) {

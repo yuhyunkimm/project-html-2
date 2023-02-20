@@ -31,7 +31,28 @@
                 <div>${boardDto.content}</div>
             </div>
             <hr />
-            <i id="heart" class="fa-regular fa-heart fa-lg"></i>
+            
+            <c:choose>
+               <c:when test="${loveDto==null}">
+                    <i id="heart-${loveDto.id}" class="fa-regular fa-heart fa-lg" value="no"></i>
+               </c:when>
+               <c:otherwise>
+                    <i id="heart-${loveDto.id}" class="fa-solid fa-heart fa-lg" value="ok"></i>
+               </c:otherwise>
+            </c:choose>
+
+            <script>
+                $("#heart").click(() => {
+                    let value = $("#heart").val();
+                    if (value == "ok") {
+                        $("#heart").removeClass("fa-solid");
+                        $("#heart").val("no");
+                    } else {
+                        $("#heart").addClass("fa-solid");
+                        $("#heart").val("ok");
+                    }
+                });
+            </script>
 
             <div class="card mt-3">
                 <form action="/reply" method="post">
