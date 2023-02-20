@@ -49,7 +49,7 @@
                     let id = $("#heart").attr("value");
 
                     // 본인의 속성이 아닌 엘레멘트의 값을 JQuery는 못가져온다
-                    if (id == undefined) {
+                    if (id == undefined || id == "") {
                         // 좋아요 통신 요청 (POST)
                         let data = {
                             boardId: boardId
